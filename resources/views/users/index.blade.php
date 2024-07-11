@@ -340,7 +340,7 @@
                                         </td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->last_login_at ? $user->last_login_at->format('M d, Y') : 'N/A' }}</td>
+                                        <td>{{ $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i:s') : 'N/A' }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -353,22 +353,41 @@
                   <div class="card-body">
                     <h4 class="card-title">Basic form elements</h4>
                     <p class="card-description"> Basic form elements </p>
-                    <form class="forms-sample">
+                    <form method="POST" action="{{ route('user.store') }}">
+                      @csrf
+                  
                       <div class="form-group">
-                        <label for="exampleInputName1">Name</label>
-                        <input type="text" class="form-control" id="exampleInputName1" placeholder="Name">
+                          <label for="name">Name</label>
+                          <input type="text" id="name" name="name" class="form-control" required>
                       </div>
+                  
                       <div class="form-group">
-                        <label for="exampleInputEmail3">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
+                          <label for="email">Email</label>
+                          <input type="email" id="email" name="email" class="form-control" required>
                       </div>
+                  
                       <div class="form-group">
-                        <label for="exampleInputPassword4">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword4" placeholder="Password">
-                      </div>
-                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                      <button class="btn btn-light">Cancel</button>
-                    </form>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                        <div id="passwordError" class="invalid-feedback" style="display: none;">
+                            Password must be at least 4 characters long.
+                        </div>
+                    </div>
+                       <button type="submit" class="btn btn-primary" onclick="validatePassword(event)">Submit</button>
+                  </form>   
+                  <script>
+                    function validatePassword(event) {
+                        var passwordInput = document.getElementById('password');
+                        var passwordError = document.getElementById('passwordError');
+                
+                        if (passwordInput.value.length < 4) {
+                            passwordError.style.display = 'block';
+                            event.preventDefault(); // Prevent form submission
+                        } else {
+                            passwordError.style.display = 'none';
+                        }
+                    }
+                </script>           
                   </div>
                 </div>
               </div>

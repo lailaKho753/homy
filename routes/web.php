@@ -12,6 +12,7 @@ Route::get('/', function () {
 //     return view('main');
 // })->name('home');
 Route::get('/users', [UserController::class, 'index']);
+Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
 
 Route::get('/home', function () {
     return view('main');
