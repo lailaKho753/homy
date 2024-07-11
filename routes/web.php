@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -10,6 +11,7 @@ Route::get('/', function () {
 // Route::get('/home', function () {
 //     return view('main');
 // })->name('home');
+Route::get('/users', [UserController::class, 'index']);
 
 Route::get('/home', function () {
     return view('main');

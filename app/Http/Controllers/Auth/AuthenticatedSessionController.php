@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Carbon;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -19,12 +21,16 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+
+        // Fetch the authenticated user
+        $user = $request->user();
+
+        // Update last_login_at field
+        $user->last_login_at = Carbon::now();
+        $user->save();
 
         $request->session()->regenerate();
 
