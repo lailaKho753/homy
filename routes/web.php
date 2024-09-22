@@ -22,6 +22,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/control', function () {
+        return view('control');
+    })->name('control');
 });
-
+Route::get('/execute-node-script', [App\Http\Controllers\NodeController::class, 'executeNodeScript']);
 require __DIR__.'/auth.php';
