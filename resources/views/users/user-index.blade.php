@@ -7,21 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Homy</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="{{ asset('style/dist/assets/vendors/mdi/css/materialdesignicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('style/dist/assets/vendors/ti-icons/css/themify-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('style/dist/assets/vendors/css/vendor.bundle.base.css') }}">
-    <link rel="stylesheet" href="{{ asset('style/dist/assets/vendors/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset ('style/dist/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
+    <link rel="stylesheet" href="{{ asset ('style/dist/assets/vendors/ti-icons/css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{ asset ('style/dist/assets/vendors/css/vendor.bundle.base.css')}}">
+    <link rel="stylesheet" href="{{ asset ('style/dist/assets/vendors/font-awesome/css/font-awesome.min.css')}}">
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="{{asset('style/dist/assets/vendors/font-awesome/css/font-awesome.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('style/dist/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}">
+    <link rel="stylesheet" href="{{ asset ('style/dist/assets/vendors/select2/select2.min.css')}}">
+    <link rel="stylesheet" href="{{ asset ('style/dist/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css')}}">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="{{asset('style/dist/assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{ asset ('style/dist/assets/css/style.css')}}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{asset('style/dist/assets/images/favicon.png')}}" />
+    <link rel="shortcut icon" href="{{ asset ('style/dist/assets/images/favicon.png')}}" />
   </head>
   <body>
     <div class="container-scroller">
@@ -30,9 +30,9 @@
         </div>
       </div>
       <!-- partial:partials/_navbar.html -->
-      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row mt-3 pt-5">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-          <a class="navbar-brand brand-logo" href="/home"><img src="{{asset('style/dist/assets/images/homy-logo.png')}}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo mt-3" href="/home"><img src="{{asset('style/dist/assets/images/homy-logo.png')}}" alt="logo" /></a>
           <a class="navbar-brand brand-logo-mini" href="/home"><img src="{{asset('style/dist/assets/images/logo-mini.svg')}}" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -172,8 +172,8 @@
           <!-- partial:../../partials/_footer.html -->
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2025 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Laila Khoirunnisa Nurul Imani <i class="mdi mdi-heart text-danger"></i></span>
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
             </div>
           </footer>
           <!-- partial -->
@@ -184,22 +184,23 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="{{asset('style/dist/assets/vendors/js/vendor.bundle.base.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/vendors/js/vendor.bundle.base.js')}}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="{{asset('style/dist/assets/vendors/chart.js/chart.umd.js')}}"></script>
-    <script src="{{asset('style/dist/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/vendors/select2/select2.min.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/vendors/typeahead.js/typeahead.bundle.min.js')}}"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="{{asset('style/dist/assets/js/off-canvas.js')}}"></script>
-    <script src="{{asset('style/dist/assets/js/misc.js')}}"></script>
-    <script src="{{asset('style/dist/assets/js/settings.js')}}"></script>
-    <script src="{{asset('style/dist/assets/js/todolist.js')}}"></script>
-    <script src="{{asset('style/dist/assets/js/jquery.cookie.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/js/off-canvas.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/js/misc.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/js/settings.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/js/todolist.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/js/jquery.cookie.js')}}"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
-    <script src="{{asset('style/dist/assets/js/dashboard.js')}}"></script>
-    <script src="{{asset('style/dist/assets/js/custom.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/js/file-upload.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/js/typeahead.js')}}"></script>
+    <script src="{{ asset ('style/dist/assets/js/select2.js')}}"></script>
     <!-- End custom js for this page -->
   </body>
 </html>
