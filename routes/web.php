@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Models\Toggle;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -26,5 +28,17 @@ Route::middleware('auth')->group(function () {
         return view('control');
     })->name('control');
 });
-Route::get('/execute-node-script', [App\Http\Controllers\NodeController::class, 'executeNodeScript']);
+Route::post('/toggle/{lampId}', function (Request $request, $lampId) {
+    $toggle = Toggle::updateOrCreate(
+        ['lamp_id' => $lampId],
+        ['state' => $request->state]
+    );
+
+    return response()->json(['success' => true, 'state' => $toggle->state]);
+});
+Route::get('/toggle/{lampId}', function ($lampId) {
+    $toggle = Toggle::where('lamp_id', $lampId)->first();
+    return response()->json(['state' => $toggle ? $toggle->state : false]);
+});
+
 require __DIR__.'/auth.php';
