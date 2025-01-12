@@ -25,15 +25,11 @@
   </head>
   <body>
     <div class="container-scroller">
-      <div class="row p-0 m-0 proBanner" id="proBanner">
-        <div class="col-md-12 p-0 m-0">
-        </div>
-      </div>
       <!-- partial:partials/_navbar.html -->
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-          <a class="navbar-brand brand-logo" href="/home"><img src="{{asset('style/dist/assets/images/homy-logo.png')}}" alt="logo" /></a>
-          <a class="navbar-brand brand-logo-mini" href="/home"><img src="{{asset('style/dist/assets/images/logo-mini.svg')}}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo" href="index.html"><img src="{{asset('style/dist/assets/images/homy-logo.png')}}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{{asset('style/dist/assets/images/logo-mini.svg')}}" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -89,87 +85,41 @@
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Users </h3>
-              <nav aria-label="breadcrumb">
-              </nav>
-            </div>
+              <h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                  <i class="mdi mdi-home"></i>
+                </span> Monitoring Page
+              </h3>
+            </div>      
+                    
             <div class="row">
-                <div class="col-lg-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">User List for HOMY</h4>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th> User </th>
-                                        <th> Name </th>
-                                        <th> Email </th>
-                                        <th> Last login </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($users as $user)
-                                    <tr>
-                                        <td class="py-1">
-                                            <img src="{{ asset('style/dist/assets/images/faces-clipart/pic-1.png')}}" alt="image" />
-                                        </td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i:s') : 'N/A' }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-              <div class="col-12 grid-margin stretch-card">
+              <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Form to Add Users</h4>
-                    <p class="card-description"> Be aware when adding a user, as they will have access and control over HOMY. </p>
-                    <form method="POST" action="{{ route('user.store') }}">
-                      @csrf
-                  
-                      <div class="form-group">
-                          <label for="name">Name</label>
-                          <input type="text" id="name" name="name" class="form-control" required>
-                      </div>
-                  
-                      <div class="form-group">
-                          <label for="email">Email</label>
-                          <input type="email" id="email" name="email" class="form-control" required>
-                      </div>
-                  
-                      <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" required>
-                        <div id="passwordError" class="invalid-feedback" style="display: none;">
-                            Password must be at least 4 characters long.
-                        </div>
+                    <div class="clearfix">
+                      <h4 class="card-title float-start">Living Room Temperature</h4>
                     </div>
-                       <button type="submit" class="btn btn-primary" onclick="validatePassword(event)">Submit</button>
-                  </form>   
-                  <script>
-                    function validatePassword(event) {
-                        var passwordInput = document.getElementById('password');
-                        var passwordError = document.getElementById('passwordError');
-                
-                        if (passwordInput.value.length < 4) {
-                            passwordError.style.display = 'block';
-                            event.preventDefault(); // Prevent form submission
-                        } else {
-                            passwordError.style.display = 'none';
-                        }
-                    }
-                </script>           
+                    <canvas id="visit-sale-chart" class="mt-4"></canvas>
                   </div>
                 </div>
               </div>
+              <div class="col-md-5 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Rain Status</h4>
+                    <div class="doughnutjs-wrapper d-flex justify-content-center">
+                      <!-- Image for rain/sun status -->
+                      <img id="rain-status-image" src="" alt="Rain or Sun Image" style="display: none; width: 200px; height: 200px;margin-top: 40px;">
+                    </div>
+                    <!-- Container for No Data text or other content -->
+                    <div id="rain-status-container" class="text-center pt-4"></div>
+                  </div>
+                </div>
+              </div>              
             </div>
           </div>
           <!-- content-wrapper ends -->
-          <!-- partial:../../partials/_footer.html -->
+          <!-- partial:partials/_footer.html -->
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
               <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2025 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
@@ -200,11 +150,84 @@
     <!-- Custom js for this page -->
     <script src="{{asset('style/dist/assets/js/dashboard.js')}}"></script>
     <script src="{{asset('style/dist/assets/js/custom.js')}}"></script>
+    <!-- End custom js for this page -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      if (window.location.pathname === '/users') {
-        document.querySelector('.navbar').classList.remove('pt-5', 'mt-3');
+      document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById("visit-sale-chart").getContext("2d");
+        const visitSaleChart = new Chart(ctx, {
+          type: "line", // Keep the chart type as line
+          data: {
+            labels: ["January", "February", "March", "April", "May", "June", "July"], // X-axis labels
+            datasets: [
+              {
+                label: "Temp", // Only one label, for example "Sales"
+                data: [65, 59, 80, 81, 56, 55, 40], // Sales data points
+                borderColor: "#9C27B0", // Purple color for the line
+                backgroundColor: "rgba(156, 39, 176, 0.2)", // Light purple for the area fill
+                fill: true, // Fill the area under the line
+                tension: 0.4, // Adds smooth curves
+                pointBorderColor: "#9C27B0", // Purple for the point border
+                pointBackgroundColor: "#FFFFFF", // White for the point background
+                pointBorderWidth: 2, // Border width for points
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: true, // Show the legend with the label
+                position: "top",
+              },
+              tooltip: {
+                enabled: true, // Enable tooltips
+              },
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: "Time", // Label for X-axis
+                },
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: "Temperature", // Label for Y-axis
+                },
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      });
+    </script>
+    <script>
+      // Simulate the rainStatus value (false for no rain)
+      const rainStatus = null; // Change this to `true` or `null` to simulate different scenarios
+
+      const rainStatusImage = document.getElementById('rain-status-image');
+      const rainStatusContainer = document.getElementById('rain-status-container');
+
+      if (rainStatus === null) {
+        // Display "No Data" if rainStatus is null
+        rainStatusImage.style.display = 'none';
+        rainStatusContainer.innerHTML = '<p>No Data</p>';
+      } else {
+        // Clear any "No Data" text
+        rainStatusContainer.innerHTML = ''; 
+        rainStatusImage.style.display = 'block'; 
+
+        if (rainStatus) {
+          // Rain image if rainStatus is true
+          rainStatusImage.src = "{{ asset('images/rain.png') }}"; 
+        } else {
+          // Sun image if rainStatus is false
+          rainStatusImage.src = "{{ asset('images/sun.png') }}";  
+        }
       }
     </script>
-    <!-- End custom js for this page -->
+    
   </body>
 </html>

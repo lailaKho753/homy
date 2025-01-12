@@ -20,6 +20,10 @@ Route::get('/home', function () {
     return view('main');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/monitoring', function () {
+    return view('monitoring.index');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -28,6 +32,7 @@ Route::middleware('auth')->group(function () {
         return view('control');
     })->name('control');
 });
+
 Route::post('/toggle/{lampId}', function (Request $request, $lampId) {
     $toggle = Toggle::updateOrCreate(
         ['lamp_id' => $lampId],

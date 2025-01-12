@@ -65,19 +65,19 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link" href="/home">
+              <a class="nav-link" href="/home" aria-expanded="false" aria-controls="charts">
                 <span class="menu-title">Control Page</span>
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
+              <a class="nav-link" href="/monitoring" aria-expanded="false" aria-controls="charts">
                 <span class="menu-title">Monitoring</span>
                 <i class="mdi mdi-chart-bar menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/users">
+              <a class="nav-link" href="/users" aria-expanded="false" aria-controls="charts">
                 <span class="menu-title">Users</span>
                 {{-- <i class="menu-arrow"></i> --}}
                 <i class="mdi mdi-lock menu-icon"></i>
@@ -128,6 +128,13 @@
                   </span>
                 </label>
               </div>
+
+              <div class="toggle-container">
+                <h2>Status Lampu&nbsp;&nbsp;&nbsp;&nbsp;<br> Teras</h2>
+                <img src="{{ asset('images/purple-bulb.jpeg') }}" alt="Lamp 1" class="toggle-image"> <!-- Replace with your image path -->
+                <label class="switch">
+                  <div class="lamp-status" id="lamp1-status"></div>
+              </div>
             </div>
           </div>
           <!-- content-wrapper ends -->
@@ -162,6 +169,11 @@
     <!-- Custom js for this page -->
     <script src="{{asset('style/dist/assets/js/dashboard.js')}}"></script>
     <script src="{{asset('style/dist/assets/js/custom.js')}}"></script>
+    <script>
+      if (window.location.pathname === '/home') {
+        document.querySelector('.navbar').classList.remove('pt-5', 'mt-3');
+      }
+    </script>
     <!-- End custom js for this page -->
   </body>
 </html>
