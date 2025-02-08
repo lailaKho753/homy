@@ -91,6 +91,7 @@
 // Ensure your Mosquitto broker is configured to accept WebSocket connections (see mosquitto.conf above)
 const mqttBrokerURL = "ws://192.168.1.8:9001"; // Replace with your broker's WebSocket URL
 const client = mqtt.connect(mqttBrokerURL);
+const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 client.on('connect', function() {
     console.log('Connected to MQTT broker');
@@ -186,27 +187,34 @@ client.on('message', function(topic, message) {
 
     // Handle temp topic
     if (topic === 'temp') { 
-        const tempValue = parseFloat(message.toString().trim()); // Parse temperature value from message
+        const tempValue = parseFloat(message.toString().trim());
         console.log(`Received temperature: ${tempValue}`);
     
-        // Get current timestamp in dd-mm-yyyy hh:mm:ss format
+        // Get current timestamp in DD-MM-YYYY HH:mm:ss format
         const currentDate = new Date();
-        const formattedDate = currentDate.toLocaleString('en-GB', { timeZone: 'Asia/Jakarta' }).replace(',', '');
+        const formattedDate = 
+            currentDate.getDate().toString().padStart(2, '0') + '-' +
+            (currentDate.getMonth() + 1).toString().padStart(2, '0') + '-' +
+            currentDate.getFullYear() + ' ' +
+            currentDate.getHours().toString().padStart(2, '0') + ':' +
+            currentDate.getMinutes().toString().padStart(2, '0') + ':' +
+            currentDate.getSeconds().toString().padStart(2, '0');
+    
+        // Get CSRF Token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
         // Send the data to the server via AJAX (post request)
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        // Use setTimeout to ensure temperature handling is non-blocking
         setTimeout(() => {
             fetch('/save-temperature', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token, // if needed for auth
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    temperature: tempValue, // Send the actual temperature value
-                    created_at: formattedDate // Use the actual timestamp
+                    temperature: tempValue, 
+                    created_at: formattedDate  // Now in d-m-Y H:i:s format
                 })
             })
             .then(response => response.json())
@@ -216,8 +224,8 @@ client.on('message', function(topic, message) {
             .catch((error) => {
                 console.error('Error saving temperature data:', error);
             });
-        }, 0); // Execute this after a tiny delay to prevent blocking
-    }
+        }, 0);
+    }       
 });
 
 

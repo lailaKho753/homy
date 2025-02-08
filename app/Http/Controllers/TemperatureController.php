@@ -7,29 +7,41 @@ use Illuminate\Http\Request;
 
 class TemperatureController extends Controller
 {
-// TemperatureController.php
     public function store(Request $request)
     {
-        // Validate the incoming request (optional)
+        // Validate the request
         $validated = $request->validate([
             'temperature' => 'required|numeric',
-            'created_at' => 'required|string', // or a Date validation if needed
+            'created_at' => 'required|date_format:d-m-Y H:i:s', // Adjust the format to match incoming data
         ]);
 
-        // Process the temperature data (e.g., save it to the database)
-        $temperature = new Temperature([
-            'temperature' => $validated['temperature'],
-            'created_at' => $validated['created_at']
-        ]);
-        $temperature->save();
+        // Save the data
+        $temperatureReading = TemperatureReading::create($validated);
 
-        // Return a JSON response
+        // Return JSON response
         return response()->json([
             'success' => true,
             'message' => 'Temperature saved successfully',
-            'data' => $temperature
+            'data' => $temperatureReading
         ]);
     }
+    
+    public function getTemperatureData()
+    {
+        $temperatures = TemperatureReading::orderBy('id', 'desc')
+            ->take(10)
+            ->get(['temperature', 'created_at']);
+    
+        // Format created_at and return
+        $temperatures->transform(function ($temp) {
+            $temp->created_at = $temp->created_at->setTimezone('Asia/Jakarta')->format('Y-m-d H:i:s');
+            return $temp;
+        });
+    
+        return response()->json($temperatures);
+    }
+    
 
 }
+
 

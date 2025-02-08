@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{asset('style/dist/assets/css/style.css')}}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('style/dist/assets/images/favicon.png')}}" />
+    <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.34/moment-timezone-with-data.min.js"></script>
   </head>
   <body>
     <div class="container-scroller">
@@ -155,58 +156,89 @@
     <!-- End custom js for this page -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const ctx = document.getElementById("visit-sale-chart").getContext("2d");
-    
-        // Initialize the chart with empty data
-        const visitSaleChart = new Chart(ctx, {
-          type: "line",
-          data: {
+document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById("visit-sale-chart").getContext("2d");
+
+    // Initialize the chart with empty data
+    const visitSaleChart = new Chart(ctx, {
+        type: "line",
+        data: {
             labels: [], // Empty labels initially
             datasets: [
-              {
-                label: "Temp",
-                data: [], // Empty data initially
-                borderColor: "#9C27B0",
-                backgroundColor: "rgba(156, 39, 176, 0.2)",
-                fill: true,
-                tension: 0.4,
-                pointBorderColor: "#9C27B0",
-                pointBackgroundColor: "#FFFFFF",
-                pointBorderWidth: 2,
-              },
+                {
+                    label: "Temp",
+                    data: [], // Empty data initially
+                    borderColor: "#9C27B0",
+                    backgroundColor: "rgba(156, 39, 176, 0.2)",
+                    fill: true,
+                    tension: 0.4,
+                    pointBorderColor: "#9C27B0",
+                    pointBackgroundColor: "#FFFFFF",
+                    pointBorderWidth: 2,
+                },
             ],
-          },
-          options: {
+        },
+        options: {
             responsive: true,
             plugins: {
-              legend: {
-                display: true,
-                position: "top",
-              },
-              tooltip: {
-                enabled: true,
-              },
+                legend: {
+                    display: true,
+                    position: "top",
+                },
+                tooltip: {
+                    enabled: true,
+                },
             },
             scales: {
-              x: {
-                title: {
-                  display: true,
-                  text: "Time",
+                x: {
+                    title: {
+                        display: true,
+                        text: "Time",
+                    },
                 },
-              },
-              y: {
-                title: {
-                  display: true,
-                  text: "Temperature",
+                y: {
+                    title: {
+                        display: true,
+                        text: "Temperature",
+                    },
+                    beginAtZero: true,
                 },
-                beginAtZero: true,
-              },
             },
-          },
-        });
-      });
-    </script>
+        },
+    });
+
+    // Function to format date as dd/mm/yyyy, hh:mm:ss
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = ("0" + date.getDate()).slice(-2); // Ensure two-digit day
+        const month = ("0" + (date.getMonth() + 1)).slice(-2); // Ensure two-digit month
+        const year = date.getFullYear();
+        const hours = ("0" + date.getHours()).slice(-2); // Ensure two-digit hours
+        const minutes = ("0" + date.getMinutes()).slice(-2); // Ensure two-digit minutes
+        const seconds = ("0" + date.getSeconds()).slice(-2); // Ensure two-digit seconds
+
+        return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    // Fetch the latest 10 temperature data and update the chart
+    fetch('/get-temperature-data')
+        .then(response => response.json())
+        .then(data => {
+            // Format the date as dd/mm/yyyy, hh:mm:ss
+            const labels = data.map(entry => formatDate(entry.created_at));
+            const temperatures = data.map(entry => entry.temperature); // Get temperature data
+
+            // Directly update the chart with the latest data (don't reverse it here)
+            visitSaleChart.data.labels = labels;
+            visitSaleChart.data.datasets[0].data = temperatures;
+
+            // Update the chart with the new data
+            visitSaleChart.update();
+        })
+        .catch(error => console.error("Error fetching temperature data:", error));
+});
+
+    </script>    
     <script>
       // Simulate the rainStatus value (false for no rain)
       const rainStatus = null; // Change this to `true` or `null` to simulate different scenarios

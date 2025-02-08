@@ -48,8 +48,9 @@ Route::get('/toggle/{lampId}', function ($lampId) {
     return response()->json(['state' => $toggle ? $toggle->state : false]);
 });
 
-Route::post('/save-temperature', [TemperatureController::class, 'store'])->middleware('auth');
-Route::get('/latest-temperature', [TemperatureController::class, 'getLatestTemperature']);
+Route::post('/save-temperature', [TemperatureController::class, 'store']);
 Route::get('/monitoring', [MonitoringController::class, 'showMonitoring']);
+Route::get('/get-temperature-data', [TemperatureController::class, 'getTemperatureData']);
+
 
 require __DIR__.'/auth.php';
