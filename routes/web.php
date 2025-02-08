@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Models\Toggle;
 use Illuminate\Http\Request;
+use App\Http\Controllers\TemperatureController;
+use App\Http\Controllers\MonitoringController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -45,5 +47,9 @@ Route::get('/toggle/{lampId}', function ($lampId) {
     $toggle = Toggle::where('lamp_id', $lampId)->first();
     return response()->json(['state' => $toggle ? $toggle->state : false]);
 });
+
+Route::post('/save-temperature', [TemperatureController::class, 'store'])->middleware('auth');
+Route::get('/latest-temperature', [TemperatureController::class, 'getLatestTemperature']);
+Route::get('/monitoring', [MonitoringController::class, 'showMonitoring']);
 
 require __DIR__.'/auth.php';

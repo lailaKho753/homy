@@ -5,6 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Homy</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('style/dist/assets/vendors/mdi/css/materialdesignicons.min.css') }}">
@@ -148,6 +149,7 @@
     <script src="{{asset('style/dist/assets/js/jquery.cookie.js')}}"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="{{asset('style/dist/assets/js/dashboard.js')}}"></script>
     <script src="{{asset('style/dist/assets/js/custom.js')}}"></script>
     <!-- End custom js for this page -->
@@ -155,21 +157,23 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const ctx = document.getElementById("visit-sale-chart").getContext("2d");
+    
+        // Initialize the chart with empty data
         const visitSaleChart = new Chart(ctx, {
-          type: "line", // Keep the chart type as line
+          type: "line",
           data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"], // X-axis labels
+            labels: [], // Empty labels initially
             datasets: [
               {
-                label: "Temp", // Only one label, for example "Sales"
-                data: [65, 59, 80, 81, 56, 55, 40], // Sales data points
-                borderColor: "#9C27B0", // Purple color for the line
-                backgroundColor: "rgba(156, 39, 176, 0.2)", // Light purple for the area fill
-                fill: true, // Fill the area under the line
-                tension: 0.4, // Adds smooth curves
-                pointBorderColor: "#9C27B0", // Purple for the point border
-                pointBackgroundColor: "#FFFFFF", // White for the point background
-                pointBorderWidth: 2, // Border width for points
+                label: "Temp",
+                data: [], // Empty data initially
+                borderColor: "#9C27B0",
+                backgroundColor: "rgba(156, 39, 176, 0.2)",
+                fill: true,
+                tension: 0.4,
+                pointBorderColor: "#9C27B0",
+                pointBackgroundColor: "#FFFFFF",
+                pointBorderWidth: 2,
               },
             ],
           },
@@ -177,24 +181,24 @@
             responsive: true,
             plugins: {
               legend: {
-                display: true, // Show the legend with the label
+                display: true,
                 position: "top",
               },
               tooltip: {
-                enabled: true, // Enable tooltips
+                enabled: true,
               },
             },
             scales: {
               x: {
                 title: {
                   display: true,
-                  text: "Time", // Label for X-axis
+                  text: "Time",
                 },
               },
               y: {
                 title: {
                   display: true,
-                  text: "Temperature", // Label for Y-axis
+                  text: "Temperature",
                 },
                 beginAtZero: true,
               },
@@ -228,6 +232,5 @@
         }
       }
     </script>
-    
   </body>
 </html>

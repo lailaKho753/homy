@@ -5,6 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Homy</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('style/dist/assets/vendors/mdi/css/materialdesignicons.min.css') }}">
@@ -24,6 +25,7 @@
     <link rel="shortcut icon" href="{{asset('style/dist/assets/images/favicon.png')}}" />
   </head>
   <body>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <div class="container-scroller">
       <div class="row p-0 m-0 proBanner" id="proBanner">
         <div class="col-md-12 p-0 m-0">
@@ -167,6 +169,7 @@
     <script src="{{asset('style/dist/assets/js/jquery.cookie.js')}}"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="{{asset('style/dist/assets/js/dashboard.js')}}"></script>
     <script src="{{asset('style/dist/assets/js/custom.js')}}"></script>
     <script>
