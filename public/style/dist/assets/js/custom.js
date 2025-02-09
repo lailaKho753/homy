@@ -110,6 +110,15 @@ client.on('connect', function() {
             console.error('Failed to subscribe to temp:', err);
         }
     });
+
+    // Subscribe to the 'rain' topic to get rain status
+    client.subscribe('rain', function(err) {
+        if (!err) {
+            console.log('Subscribed to rain topic');
+        } else {
+            console.error('Failed to subscribe to rain:', err);
+        }
+    });
 });
 
 // Send a command by publishing to the relevant topic
@@ -138,14 +147,18 @@ function handleToggleChange(toggleId, lampId) {
     const toggle = document.getElementById(toggleId);
     const toggleText = document.getElementById(`${toggleId}-text`);
 
-    toggle.addEventListener('change', function() {
-        const state = this.checked ? true : false;
-        sendLampCommand(lampId, state ? 'on' : 'off');
-        saveToggleState(lampId, state);
+    if (toggle) {
+        toggle.addEventListener('change', function() {
+            const state = this.checked ? true : false;
+            sendLampCommand(lampId, state ? 'on' : 'off');
+            saveToggleState(lampId, state);
 
-        // Debugging output
-        console.log(`Toggle ${lampId} is now ${state ? 'ON' : 'OFF'}`);
-    });
+            // Debugging output
+            console.log(`Toggle ${lampId} is now ${state ? 'ON' : 'OFF'}`);
+        });
+    } else {
+        console.error(`Element with ID ${toggleId} not found`);
+    }
 }
 
 // Call the handleToggleChange for each toggle
@@ -158,6 +171,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const lampIds = ['lamp2', 'lamp3', 'stop_kontak'];
 
     lampIds.forEach(lampId => {
+        const toggle = document.getElementById(`${lampId}-toggle`);
+        
+        if (!toggle) {
+            console.error(`Element with ID ${lampId}-toggle not found!`);
+            return; // Skip this iteration if the element is not found
+        }
+
         fetch(`/toggle/${lampId}`)
             .then(response => response.json())
             .then(data => {
@@ -171,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Handle incoming MQTT messages
 // Handle incoming MQTT messages
 client.on('message', function(topic, message) {
     // Handle lampu_teras topic
@@ -225,8 +246,46 @@ client.on('message', function(topic, message) {
                 console.error('Error saving temperature data:', error);
             });
         }, 0);
-    }       
+    }
+
+    // Handle rain topic
+    if (topic === 'rain') {
+        const rainStatus = message.toString().trim() === '1'; // true if rain, false otherwise
+        console.log(`Received rain status: ${rainStatus}`);
+
+        // Update the rain status image based on the rain value
+        const rainStatusImage = document.getElementById('rain-status-image');
+        const rainStatusContainer = document.getElementById('rain-status-container');
+
+        // Check if elements exist
+        if (!rainStatusImage || !rainStatusContainer) {
+            console.error('Required DOM elements not found!');
+            return;
+        }
+
+        // Delay the rain status update with setTimeout
+        setTimeout(() => {
+            if (rainStatus === null) {
+                // Display "No Data" if rainStatus is null
+                rainStatusImage.src = '/images/no-data.png';
+                rainStatusContainer.innerHTML = '<p>No Data</p>';
+            } else {
+                // Clear any "No Data" text and show the appropriate image
+                rainStatusContainer.innerHTML = '';
+                rainStatusImage.style.display = 'block';
+
+                if (rainStatus) {
+                    // Show rain image if rainStatus is true
+                    rainStatusImage.src = '/images/rain.png';
+                } else {
+                    // Show sun image if rainStatus is false
+                    rainStatusImage.src = '/images/sun.png';
+                }
+            }
+        }, 0);
+    } 
 });
+
 
 
 // Function to send the temperature data to Laravel (via an API route)

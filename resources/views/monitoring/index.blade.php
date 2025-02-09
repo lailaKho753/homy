@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="{{asset('style/dist/assets/css/style.css')}}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('style/dist/assets/images/favicon.png')}}" />
-    <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.34/moment-timezone-with-data.min.js"></script>
   </head>
   <body>
     <div class="container-scroller">
@@ -152,117 +151,93 @@
     <!-- Custom js for this page -->
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="{{asset('style/dist/assets/js/dashboard.js')}}"></script>
-    <script src="{{asset('style/dist/assets/js/custom.js')}}"></script>
     <!-- End custom js for this page -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const ctx = document.getElementById("visit-sale-chart").getContext("2d");
+      document.addEventListener("DOMContentLoaded", function () {
+          const ctx = document.getElementById("visit-sale-chart").getContext("2d");
 
-    // Initialize the chart with empty data
-    const visitSaleChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: [], // Empty labels initially
-            datasets: [
-                {
-                    label: "Temp",
-                    data: [], // Empty data initially
-                    borderColor: "#9C27B0",
-                    backgroundColor: "rgba(156, 39, 176, 0.2)",
-                    fill: true,
-                    tension: 0.4,
-                    pointBorderColor: "#9C27B0",
-                    pointBackgroundColor: "#FFFFFF",
-                    pointBorderWidth: 2,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: "top",
-                },
-                tooltip: {
-                    enabled: true,
-                },
-            },
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: "Time",
-                    },
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: "Temperature",
-                    },
-                    beginAtZero: true,
-                },
-            },
-        },
-    });
+          // Initialize the chart with empty data
+          const visitSaleChart = new Chart(ctx, {
+              type: "line",
+              data: {
+                  labels: [], // Empty labels initially
+                  datasets: [
+                      {
+                          label: "Temp",
+                          data: [], // Empty data initially
+                          borderColor: "#9C27B0",
+                          backgroundColor: "rgba(156, 39, 176, 0.2)",
+                          fill: true,
+                          tension: 0.4,
+                          pointBorderColor: "#9C27B0",
+                          pointBackgroundColor: "#FFFFFF",
+                          pointBorderWidth: 2,
+                      },
+                  ],
+              },
+              options: {
+                  responsive: true,
+                  plugins: {
+                      legend: {
+                          display: true,
+                          position: "top",
+                      },
+                      tooltip: {
+                          enabled: true,
+                      },
+                  },
+                  scales: {
+                      x: {
+                          title: {
+                              display: true,
+                              text: "Time",
+                          },
+                      },
+                      y: {
+                          title: {
+                              display: true,
+                              text: "Temperature",
+                          },
+                          beginAtZero: true,
+                      },
+                  },
+              },
+          });
 
-    // Function to format date as dd/mm/yyyy, hh:mm:ss
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = ("0" + date.getDate()).slice(-2); // Ensure two-digit day
-        const month = ("0" + (date.getMonth() + 1)).slice(-2); // Ensure two-digit month
-        const year = date.getFullYear();
-        const hours = ("0" + date.getHours()).slice(-2); // Ensure two-digit hours
-        const minutes = ("0" + date.getMinutes()).slice(-2); // Ensure two-digit minutes
-        const seconds = ("0" + date.getSeconds()).slice(-2); // Ensure two-digit seconds
+          // Function to format date as dd/mm/yyyy, hh:mm:ss
+          function formatDate(dateString) {
+              const date = new Date(dateString);
+              const day = ("0" + date.getDate()).slice(-2); // Ensure two-digit day
+              const month = ("0" + (date.getMonth() + 1)).slice(-2); // Ensure two-digit month
+              const year = date.getFullYear();
+              const hours = ("0" + date.getHours()).slice(-2); // Ensure two-digit hours
+              const minutes = ("0" + date.getMinutes()).slice(-2); // Ensure two-digit minutes
+              const seconds = ("0" + date.getSeconds()).slice(-2); // Ensure two-digit seconds
 
-        return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-    }
+              return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+          }
 
-    // Fetch the latest 10 temperature data and update the chart
-    fetch('/get-temperature-data')
-        .then(response => response.json())
-        .then(data => {
-            // Format the date as dd/mm/yyyy, hh:mm:ss
-            const labels = data.map(entry => formatDate(entry.created_at));
-            const temperatures = data.map(entry => entry.temperature); // Get temperature data
+          // Fetch the latest 10 temperature data and update the chart
+          fetch('/get-temperature-data')
+              .then(response => response.json())
+              .then(data => {
+                  // Format the date as dd/mm/yyyy, hh:mm:ss
+                  const labels = data.map(entry => formatDate(entry.created_at));
+                  const temperatures = data.map(entry => entry.temperature); // Get temperature data
 
-            // Directly update the chart with the latest data (don't reverse it here)
-            visitSaleChart.data.labels = labels;
-            visitSaleChart.data.datasets[0].data = temperatures;
+                  // Directly update the chart with the latest data (don't reverse it here)
+                  visitSaleChart.data.labels = labels;
+                  visitSaleChart.data.datasets[0].data = temperatures;
 
-            // Update the chart with the new data
-            visitSaleChart.update();
-        })
-        .catch(error => console.error("Error fetching temperature data:", error));
-});
-
+                  // Update the chart with the new data
+                  visitSaleChart.update();
+              })
+              .catch(error => console.error("Error fetching temperature data:", error));
+      });
     </script>    
-    <script>
-      // Simulate the rainStatus value (false for no rain)
-      const rainStatus = null; // Change this to `true` or `null` to simulate different scenarios
-
-      const rainStatusImage = document.getElementById('rain-status-image');
-      const rainStatusContainer = document.getElementById('rain-status-container');
-
-      if (rainStatus === null) {
-        // Display "No Data" if rainStatus is null
-        rainStatusImage.style.display = 'none';
-        rainStatusContainer.innerHTML = '<p>No Data</p>';
-      } else {
-        // Clear any "No Data" text
-        rainStatusContainer.innerHTML = ''; 
-        rainStatusImage.style.display = 'block'; 
-
-        if (rainStatus) {
-          // Rain image if rainStatus is true
-          rainStatusImage.src = "{{ asset('images/rain.png') }}"; 
-        } else {
-          // Sun image if rainStatus is false
-          rainStatusImage.src = "{{ asset('images/sun.png') }}";  
-        }
-      }
-    </script>
+    <img id="rain-status-image" src="" alt="Rain status">
+    <div id="rain-status-container"></div>
+    <script src="{{asset('style/dist/assets/js/custom.js')}}"></script>
   </body>
 </html>
